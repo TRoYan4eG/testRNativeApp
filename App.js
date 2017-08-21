@@ -1,49 +1,50 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
+import { Provider } from 'react-redux'
+import { createStore, applyMiddleware, combineReducers, compose } from 'redux'
+import thunkMidleware from 'redux-thunk'
+import {createLogger} from 'redux-logger'
+import reducer from './app/reducers'
 
-export default class App extends React.Component {
-  constructor(props) {
-        super(props);
-        this.state = {display: 'none'};
-  }
+import {
+    Alert,
+    AppRegistry,
+    Button,
+    StyleSheet,
+    View,
+    Text
+} from 'react-native';
 
-  render() {
-      function showText() {
-        this.setState({display: this.state.display === 'none' ? 'block' : 'none'})
-      }
-    return (
-      <View style={styles.container}>
-        <View style={styles.button} onClick={() => {this.showText()}}>
-          <Text style={styles.buttonText}>Show</Text>
-        </View>
-          <Text style={styles.text}>{this.state.text}</Text>
-      </View>
-    );
-  }
+const loggerMidleware = createLogger({ predicate: (getState, action) => __DEV__ })
+
+function configureStore(initialState) {
+    const enhancer = compose(
+        applyMiddleware(
+            thunkMidleware,
+            loggerMidleware
+        ),
+    )
+    return createStore(reducer, initialState, enhancer)
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-    text: {
-        color: 'red',
-        fontSize: 18
-    },
+const store = configureStore({})
 
-    button: {
-        backgroundColor: 'blue',
-        width: 80,
-        height: 80,
-        borderRadius: 40,
-        border: 40
-    },
-
-    buttonText: {
-        color: 'white',
-        fontSize: 20,
+export default class App extends React.Component {
+    render(){
+        return (
+            <Provider store={ store }>
+                <Pechkin />
+            </Provider>)
     }
-});
+
+}
+
+class Pechkin extends Component {
+    render() {
+        return <View>
+            <Button style={{marginTop: 100, alignItems: 'flex-end'}} onPress={() => Alert.alert('Magic')} title="Make some magic!"/>
+        </View>
+    }
+}
+
+
+
