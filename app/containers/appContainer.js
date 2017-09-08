@@ -11,10 +11,6 @@ const {
 } = ReactNative
 
 class AppContainer extends Component{
-    constructor(props) {
-        super();
-    }
-
     addRecipe(){
         this.props.addRecipe()
     }

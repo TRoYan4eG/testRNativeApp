@@ -1,8 +1,17 @@
 {
-  "presets": ["babel-preset-expo"],
-  "env": {
-    "development": {
-      "plugins": ["transform-react-jsx-source"]
-    }
-  }
+  "presets": [
+    "react-native"
+  ],
+  "plugins": [
+    "transform-decorators-legacy",
+    "styled-components-selector",
+    "transform-class-properties",
+    ["transform-runtime", {
+      "helpers": false, // defaults to true
+      "polyfill": false, // defaults to true
+      "regenerator": true // defaults to true
+    }],
+    "syntax-dynamic-import",
+    ["transform-object-rest-spread", { "useBuiltIns": true }]
+  ]
 }
